@@ -5,16 +5,15 @@ import "github.com/gin-gonic/gin"
 // Initialization function to set up and register the controller hierarchy and routes
 func init() {
 	// Create the grandson controller and register it under the son controller at the "/grandson" path
+	grandson := NewGrandsonController()
+	Register("/api/father/son/grandson", grandson)
+
 	son := NewSonController()
-	son.Register("/grandson", NewGrandsonController())
+	Register("/api/father/son", son)
 
 	// Create the father controller
 	father := NewFatherController()
-	// Register the son controller under the father controller at the "/son" path
-	father.Register("/son", son)
-
-	// Register the father controller at the top-level path "/api/father"
-	Register("/api/father", father)
+	Register("/", father)
 }
 
 // Example father controller
@@ -31,8 +30,6 @@ func NewFatherController() *FatherController {
 
 // Initialize routes for the father controller
 func (u *FatherController) Init(ctx *Context, router gin.IRouter) {
-	u.BaseController.Init(router)
-
 	// Register specific route handlers for the father controller
 	router.GET("/hello", u.Hello)    // Route for greeting
 	router.POST("/create", u.Create) // Route for creating a new resource
@@ -50,20 +47,16 @@ func (u *FatherController) Create(c *gin.Context) {
 
 // Example son controller
 type SonController struct {
-	*BaseController
+	BaseController
 }
 
 // Constructor function to create a new son controller instance
 func NewSonController() *SonController {
-	return &SonController{
-		BaseController: NewBaseController(),
-	}
+	return &SonController{}
 }
 
 // Initialize routes for the son controller
 func (a *SonController) Init(ctx *Context, router gin.IRouter) {
-	a.BaseController.Init(router)
-
 	// Register specific route handlers for the son controller
 	router.GET("/hello", a.Hello) // Route for greeting
 	router.GET("/:id", a.Detail)  // Route for detailed view based on ID
@@ -82,20 +75,16 @@ func (a *SonController) Detail(c *gin.Context) {
 
 // Example grandson controller
 type GrandsonController struct {
-	*BaseController
+	BaseController
 }
 
 // Constructor function to create a new grandson controller instance
 func NewGrandsonController() *GrandsonController {
-	return &GrandsonController{
-		BaseController: NewBaseController(),
-	}
+	return &GrandsonController{}
 }
 
 // Initialize routes for the grandson controller
 func (a *GrandsonController) Init(ctx *Context, router gin.IRouter) {
-	a.BaseController.Init(router)
-
 	// Register specific route handlers for the grandson controller
 	router.GET("/hello", a.Hello)   // Route for greeting
 	router.GET("/detail", a.Detail) // Route for detailed view

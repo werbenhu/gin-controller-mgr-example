@@ -50,58 +50,34 @@ func Register(path string, controller Controller) {
 	GetRegistry().Register(path, controller)
 }
 
+type Context struct {
+}
+
 // Controller - Defines the controller interface
 type Controller interface {
-	// Register - Registers a nested controller
-	Register(path string, controller Controller)
 	// Init - Initializes routes for the controller
 	Init(ctx *Context, router gin.IRouter)
 }
 
 // BaseController - Base controller implementation
 type BaseController struct {
-	router     gin.IRouter
-	subRouters map[string]Controller
 }
 
 // NewBaseController - Creates a new base controller instance
 func NewBaseController() *BaseController {
-	return &BaseController{
-		subRouters: make(map[string]Controller),
-	}
-}
-
-// Register - Registers a sub-controller for a given path
-func (b *BaseController) Register(path string, controller Controller) {
-	b.subRouters[path] = controller
-}
-
-// Init - Initializes routes and sub-controllers
-func (b *BaseController) Init(router gin.IRouter) {
-	b.router = router
-	// Initialize all sub-controllers
-	for path, controller := range b.subRouters {
-		controller.Init(router.Group(path))
-	}
+	return &BaseController{}
 }
 
 // ControllerManager - Manages controllers and routing with a Gin engine
 type ControllerManager struct {
-	engine     *gin.Engine
-	controller Controller
+	engine *gin.Engine
 }
 
 // NewControllerManager - Creates a new controller manager instance
 func NewControllerManager(engine *gin.Engine) *ControllerManager {
 	return &ControllerManager{
-		engine:     engine,
-		controller: NewBaseController(),
+		engine: engine,
 	}
-}
-
-// Register - Registers a top-level route with a controller
-func (m *ControllerManager) Register(path string, controller Controller) {
-	m.controller.Register(path, controller)
 }
 
 // Init - Initializes all registered routes from the global registry
