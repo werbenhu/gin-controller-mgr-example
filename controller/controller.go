@@ -55,7 +55,7 @@ type Controller interface {
 	// Register - Registers a nested controller
 	Register(path string, controller Controller)
 	// Init - Initializes routes for the controller
-	Init(router gin.IRouter)
+	Init(ctx *Context, router gin.IRouter)
 }
 
 // BaseController - Base controller implementation
@@ -105,10 +105,10 @@ func (m *ControllerManager) Register(path string, controller Controller) {
 }
 
 // Init - Initializes all registered routes from the global registry
-func (m *ControllerManager) Init() {
+func (m *ControllerManager) Init(ctx *Context) {
 	// Retrieve all routes from the global registry
 	routes := GetRegistry().GetRoutes()
 	for path, controller := range routes {
-		controller.Init(m.engine.Group(path))
+		controller.Init(ctx, m.engine.Group(path))
 	}
 }

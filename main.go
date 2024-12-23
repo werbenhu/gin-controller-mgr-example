@@ -12,8 +12,10 @@ func main() {
 	// Create a controller manager
 	manager := controller.NewControllerManager(engine)
 
+	ctx := &controller.Context{}
+
 	// Initialize all routes
-	manager.Init()
+	manager.Init(ctx)
 
 	// Start the server
 	engine.Run(":8080")

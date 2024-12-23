@@ -30,7 +30,7 @@ func NewFatherController() *FatherController {
 }
 
 // Initialize routes for the father controller
-func (u *FatherController) Init(router gin.IRouter) {
+func (u *FatherController) Init(ctx *Context, router gin.IRouter) {
 	u.BaseController.Init(router)
 
 	// Register specific route handlers for the father controller
@@ -61,7 +61,7 @@ func NewSonController() *SonController {
 }
 
 // Initialize routes for the son controller
-func (a *SonController) Init(router gin.IRouter) {
+func (a *SonController) Init(ctx *Context, router gin.IRouter) {
 	a.BaseController.Init(router)
 
 	// Register specific route handlers for the son controller
@@ -93,7 +93,7 @@ func NewGrandsonController() *GrandsonController {
 }
 
 // Initialize routes for the grandson controller
-func (a *GrandsonController) Init(router gin.IRouter) {
+func (a *GrandsonController) Init(ctx *Context, router gin.IRouter) {
 	a.BaseController.Init(router)
 
 	// Register specific route handlers for the grandson controller
